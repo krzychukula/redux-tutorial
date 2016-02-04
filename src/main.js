@@ -1,6 +1,6 @@
 'use strict'
 
-const {createStore} = window.Redux
+import {createStore} from 'redux'
 
 const counter = (state = 0, action) => {
   switch (action.type) {

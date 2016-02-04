@@ -1,0 +1,34 @@
+{
+  "name": "redux-tutorial",
+  "version": "1.0.0",
+  "description": "Playing with redux",
+  "main": "index.js",
+  "scripts": {
+    "start": "live-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krzychukula/redux-tutorial.git"
+  },
+  "author": "krzychukula",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/krzychukula/redux-tutorial/issues"
+  },
+  "homepage": "https://github.com/krzychukula/redux-tutorial#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "jspm": "^0.16.27"
+  },
+  "jspm": {
+    "dependencies": {
+      "redux": "npm:redux@^3.2.1"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^1.1.4"
+    }
+  }
+}
