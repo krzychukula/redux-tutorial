@@ -39,6 +39,49 @@ const todos = (state = [], action) => {
   }
 }
 
+const visibilityFilter = (
+  state = 'SHOW_ALL',
+  action
+) => {
+  switch (action.type) {
+    case 'SET_VISIBILITY_FILTER':
+      return action.filter
+    default:
+      return state
+  }
+}
+
+const todoApp = (state = {}, action) => {
+  return {
+    todos: todos(
+      state.todos,
+      action
+    ),
+    visibilityFilter: visibilityFilter(
+      state.visibilityFilter,
+      action
+    )
+  }
+}
+
+import { createStore } from 'redux'
+
+const store = createStore(todoApp)
+
+console.log('Initial store', store.getState())
+console.log('ADD_TODO', store.dispatch({
+  type: 'ADD_TODO',
+  id: 0,
+  text: 'Learn Redux'
+}))
+console.log('Store', store.getState())
+
+console.log('SET_VISIBILITY_FILTER', store.dispatch({
+  type: 'SET_VISIBILITY_FILTER',
+  filter: 'SHOW_COMPLETED'
+}))
+console.log('Store', store.getState())
+
 const testAddTodo = () => {
   const stateBefore = []
   const action = {
