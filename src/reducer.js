@@ -2,7 +2,11 @@
 
 import expect from 'expect'
 import deepFreeze from 'deep-freeze'
-import { createStore } from 'redux'
+import { createStore, combineReducers } from 'redux'
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+const { Component } = React
 
 const todo = (state, action) => {
   switch (action.type) {
@@ -49,20 +53,6 @@ const visibilityFilter = (
       return action.filter
     default:
       return state
-  }
-}
-
-const combineReducers = (reducers) => {
-  return (state = {}, action) => {
-    return Object.keys(reducers).reduce(
-      (nextState, key) => {
-        nextState[key] = reducers[key](
-          state[key], action
-        )
-        return nextState
-      },
-      {}
-    )
   }
 }
 
@@ -143,3 +133,43 @@ const testToggleTodo = () => {
 testAddTodo()
 testToggleTodo()
 console.log('reducer tests passed')
+
+let nextTodoId = 1
+class TodoApp extends Component {
+  render () {
+    return (
+      <div>
+        <input ref={node => {
+          this.input = node
+        }} />
+        <button onClick={() => {
+          store.dispatch({
+            type: 'ADD_TODO',
+            text: this.input.value,
+            id: nextTodoId++
+          })
+          this.input.value = ''
+        }}>Add Todo</button>
+        <ul>
+          {this.props.todos.map(todo => {
+            return <li key={todo.id}>
+              {todo.text}
+            </li>
+          })}
+        </ul>
+      </div>
+    )
+  }
+}
+TodoApp.propTypes = {todos: React.PropTypes.array}
+
+const render = () => {
+  ReactDOM.render(
+    <TodoApp
+      todos={store.getState().todos}/>,
+    document.getElementById('root')
+  )
+}
+
+store.subscribe(render)
+render()
