@@ -134,6 +134,23 @@ testAddTodo()
 testToggleTodo()
 console.log('reducer tests passed')
 
+const getVisibleTodos = (todos, filter) => {
+  switch (filter) {
+    case 'SHOW_ALL':
+      return todos
+    case 'SHOW_COMPLETED':
+      return todos.filter(
+        t => t.completed
+      )
+    case 'SHOW_ACTIVE':
+      return todos.filter(
+        t => !t.completed
+      )
+    default:
+      return todos
+  }
+}
+
 const FilterLink = ({
   filter,
   currentFilter,
@@ -157,21 +174,33 @@ const FilterLink = ({
   )
 }
 
-const getVisibleTodos = (todos, filter) => {
-  switch (filter) {
-    case 'SHOW_ALL':
-      return todos
-    case 'SHOW_COMPLETED':
-      return todos.filter(
-        t => t.completed
-      )
-    case 'SHOW_ACTIVE':
-      return todos.filter(
-        t => !t.completed
-      )
-    default:
-      return todos
-  }
+const Todo = ({
+  onClick,
+  completed,
+  text
+}) => {
+  return (<li
+       onClick={onClick}
+       style={{
+         textDecoration:
+          completed ? 'line-through' : 'none'
+       }}>
+    {text}
+  </li>)
+}
+
+const TodoList = ({
+  todos,
+  onTodoClick
+}) => {
+  return (
+    <ul>
+    {todos.map(todo =>
+      (<Todo key={todo.id}
+      {...todo}
+      onClick={() => onTodoClick(todo.id)} />)
+    )}
+  </ul>)
 }
 
 let nextTodoId = 1
@@ -198,23 +227,14 @@ class TodoApp extends Component {
           })
           this.input.value = ''
         }}>Add Todo</button>
-        <ul>
-          {visibleTodos.map(todo => {
-            return <li key={todo.id}
-                       onClick={() => {
-                         store.dispatch({
-                           type: 'TOGGLE_TODO',
-                           id: todo.id
-                         })
-                       }}
-                       style={{
-                         textDecoration:
-                          todo.completed ? 'line-through' : 'none'
-                       }}>
-              {todo.text}
-            </li>
-          })}
-        </ul>
+        <TodoList
+          todos={visibleTodos}
+          onTodoClick={id =>
+              store.dispatch({
+                type: 'TOGGLE_TODO',
+                id: id
+              })
+          } />
         <p>
           Show:
           {' '}
