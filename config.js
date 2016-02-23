@@ -21,7 +21,8 @@ System.config({
     "expect": "npm:expect@1.14.0",
     "react": "npm:react@0.14.7",
     "react-dom": "npm:react-dom@0.14.7",
-    "redux": "npm:redux@3.2.1",
+    "react-redux": "npm:react-redux@4.4.0",
+    "redux": "npm:redux@3.3.1",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.3.0"
     },
@@ -97,6 +98,10 @@ System.config({
     "npm:inherits@2.0.1": {
       "util": "github:jspm/nodelibs-util@0.1.0"
     },
+    "npm:invariant@2.2.0": {
+      "loose-envify": "npm:loose-envify@1.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2"
+    },
     "npm:is-arrow-function@2.0.3": {
       "is-callable": "npm:is-callable@1.1.2"
     },
@@ -113,7 +118,8 @@ System.config({
       "is-symbol": "npm:is-symbol@1.0.1",
       "object.entries": "npm:object.entries@1.0.3"
     },
-    "npm:lodash@4.2.1": {
+    "npm:lodash@4.5.1": {
+      "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
     "npm:loose-envify@1.1.0": {
@@ -137,6 +143,15 @@ System.config({
     "npm:react-dom@0.14.7": {
       "react": "npm:react@0.14.7"
     },
+    "npm:react-redux@4.4.0": {
+      "hoist-non-react-statics": "npm:hoist-non-react-statics@1.0.5",
+      "invariant": "npm:invariant@2.2.0",
+      "lodash": "npm:lodash@4.5.1",
+      "loose-envify": "npm:loose-envify@1.1.0",
+      "process": "github:jspm/nodelibs-process@0.1.2",
+      "react": "npm:react@0.14.7",
+      "redux": "npm:redux@3.3.1"
+    },
     "npm:react@0.14.7": {
       "fbjs": "npm:fbjs@0.6.1",
       "process": "github:jspm/nodelibs-process@0.1.2"
@@ -151,8 +166,9 @@ System.config({
       "stream-browserify": "npm:stream-browserify@1.0.0",
       "string_decoder": "npm:string_decoder@0.10.31"
     },
-    "npm:redux@3.2.1": {
-      "lodash": "npm:lodash@4.2.1",
+    "npm:redux@3.3.1": {
+      "lodash": "npm:lodash@4.5.1",
+      "lodash-es": "npm:lodash-es@4.5.1",
       "loose-envify": "npm:loose-envify@1.1.0",
       "process": "github:jspm/nodelibs-process@0.1.2"
     },
