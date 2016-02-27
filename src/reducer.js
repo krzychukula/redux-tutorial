@@ -5,8 +5,31 @@ import deepFreeze from 'deep-freeze'
 import { createStore, combineReducers } from 'redux'
 import React from 'react'
 import ReactDOM from 'react-dom'
-const { Component } = React
 import { Provider, connect } from 'react-redux'
+
+// action creators
+let nextTodoId = 1
+const addTodo = (text) => {
+  return {
+    type: 'ADD_TODO',
+    id: nextTodoId++,
+    text
+  }
+}
+
+const setVisibilityFilter = (filter) => {
+  return {
+    type: 'SET_VISIBILITY_FILTER',
+    filter
+  }
+}
+
+const toggleTodo = (id) => {
+  return {
+    type: 'TOGGLE_TODO',
+    id
+  }
+}
 
 const todo = (state, action) => {
   switch (action.type) {
@@ -155,42 +178,31 @@ const Link = ({
   )
 }
 
-class FilterLink extends Component {
-  componentDidMount () {
-    const { store } = this.context
-    this.unsubscribe = store.subscribe(() => {
-      this.forceUpdate()
-    })
-  }
-  componentWillUnmount () {
-    this.unsubscribe()
-  }
-  render () {
-    const props = this.props
-    const { store } = this.context
-    const state = store.getState()
-
-    return (
-      <Link
-        active={
-          props.filter === state.visibilityFilter
-        }
-        onClick={() =>
-          store.dispatch({
-            type: 'SET_VISIBILITY_FILTER',
-            filter: props.filter
-          })
-        } >
-          {props.children}
-        </Link>
-    )
+const mapStateToLinkProps = (
+  state,
+  ownProps
+) => {
+  return {
+    active: ownProps.filter === state.visibilityFilter
   }
 }
-FilterLink.contextTypes = {
-  store: React.PropTypes.object
+
+const mapDispatchToLinkProps = (
+  dispatch,
+  ownProps
+) => {
+  return {
+    onClick: () => {
+      dispatch(setVisibilityFilter(ownProps.filter))
+    }
+  }
 }
 
-let nextTodoId = 1
+const FilterLink = connect(
+  mapStateToLinkProps,
+  mapDispatchToLinkProps
+)(Link)
+
 let AddTodo = ({ dispatch }) => {
   let input
 
@@ -200,11 +212,7 @@ let AddTodo = ({ dispatch }) => {
         input = node
       }} />
       <button onClick={() => {
-        dispatch({
-          type: 'ADD_TODO',
-          id: nextTodoId++,
-          text: input.value
-        })
+        dispatch(addTodo(input.value))
         input.value = ''
       }}>Add Todo</button>
     </div>
@@ -218,11 +226,11 @@ const Todo = ({
   text
 }) => {
   return (<li
-       onClick={onClick}
-       style={{
-         textDecoration:
-          completed ? 'line-through' : 'none'
-       }}>
+    onClick={onClick}
+    style={{
+      textDecoration:
+        completed ? 'line-through' : 'none'
+    }}>
     {text}
   </li>)
 }
@@ -233,12 +241,12 @@ const TodoList = ({
 }) => {
   return (
     <ul>
-    {todos.map(todo =>
-      (<Todo key={todo.id}
-      {...todo}
-      onClick={() => onTodoClick(todo.id)} />)
-    )}
-  </ul>)
+      {todos.map(todo =>
+        (<Todo key={todo.id}
+          {...todo}
+          onClick={() => onTodoClick(todo.id)} />)
+      )}
+    </ul>)
 }
 
 const Footer = () => (
@@ -277,10 +285,7 @@ const mapStateTodoListToProps = (state) => {
 const mapDispatchTodoListToProps = (dispatch) => {
   return {
     onTodoClick: (id) => {
-      dispatch({
-        type: 'TOGGLE_TODO',
-        id
-      })
+      dispatch(toggleTodo(id))
     }
   }
 }
